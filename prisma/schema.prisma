@@ -12,6 +12,7 @@ datasource db {
 
 model Message {
   id        Int      @id @default(autoincrement())
+  message   String
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
   chat      Chat     @relation(fields: [chatId], references: [id])
@@ -22,7 +23,7 @@ model Message {
 
 model Chat {
   id        Int            @id @default(autoincrement())
-  users     UsersOnChats[]
+  users     User[]
   messages  Message[]
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
@@ -33,19 +34,8 @@ model User {
   username  String         @unique
   password  String
   bio       String?
-  chats     UsersOnChats[]
+  chats     Chat[]
   messages  Message[]
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
-}
-
-model UsersOnChats {
-  chat       Chat     @relation(fields: [chatId], references: [id])
-  chatId     Int
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int
-  assignedAt DateTime @default(now())
-  assignedBy String
-
-  @@id([chatId, userId])
 }
