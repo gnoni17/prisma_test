@@ -1,4 +1,4 @@
-import { Message, PrismaClient } from "@prisma/client";
+import { Message, PrismaClient, User } from "@prisma/client";
 import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
@@ -6,12 +6,13 @@ const prisma = new PrismaClient();
 export const createMessage = async (req: Request, res: Response) => {
   const { chatId } = req.params;
   const data: Message = req.body;
+  const me: User = res.locals.user;
 
   try {
     const message = await prisma.message.create({
       data: {
         chatId: Number(chatId),
-        userId: data.userId,
+        userId: me.id,
         message: data.message,
       },
     });

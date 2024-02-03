@@ -3,6 +3,7 @@ import { userRoutes } from "./routes/userRoutes";
 import { chatRoutes } from "./routes/chatRoutes";
 import { messageRoutes } from "./routes/messageRoutes";
 import { authRoutes } from "./routes/authRoutes";
+import { authMiddleware } from "./middlerware/authMiddleware";
 
 const app = express();
 
@@ -10,9 +11,9 @@ const app = express();
 app.use(express.json());
 
 // routes
-app.use("/", authRoutes)
-app.use("/api/user", userRoutes)
-app.use("/api/chat", chatRoutes)
-app.use("/api/message", messageRoutes)
+app.use("/", authRoutes);
+app.use("/api/user", authMiddleware, userRoutes);
+app.use("/api/chat", authMiddleware, chatRoutes);
+app.use("/api/message", authMiddleware, messageRoutes);
 
 app.listen("8000", () => console.log(console.log("server is run")));

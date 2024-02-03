@@ -14,13 +14,13 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-  const { userId } = req.params;
   const { data }: { data: User } = req.body;
+  const me: User = res.locals.user;
 
   try {
     const user = await prisma.user.update({
       where: {
-        id: Number(userId),
+        id: me.id,
       },
       data: {
         bio: data.bio,

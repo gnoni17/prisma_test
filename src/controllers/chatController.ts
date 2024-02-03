@@ -1,16 +1,17 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
 export const createChat = async (req: Request, res: Response) => {
   const { userIds }: { userIds: number[] } = req.body;
+  const me: User = res.locals.user;
 
   try {
     const chat = await prisma.chat.create({
       data: {
         users: {
-          connect: [{ id: userIds[0] }, { id: userIds[1] }],
+          connect: [{ id: me.id }, ...userIds.map((e) => ({ id: e }))],
         },
       },
     });
@@ -21,7 +22,7 @@ export const createChat = async (req: Request, res: Response) => {
 };
 
 export const getAllChats = async (req: Request, res: Response) => {
-  const { userId } = req.params;
+  const me: User = res.locals.user;
 
   try {
     const chats = await prisma.chat.findMany({
@@ -29,7 +30,7 @@ export const getAllChats = async (req: Request, res: Response) => {
         users: {
           some: {
             id: {
-              equals: Number(userId),
+              equals: me.id,
             },
           },
         },
@@ -41,8 +42,8 @@ export const getAllChats = async (req: Request, res: Response) => {
         },
       },
       orderBy: {
-        updatedAt: "desc"
-      }
+        updatedAt: "desc",
+      },
     });
     res.send(chats).status(200);
   } catch (error) {
