@@ -15,9 +15,9 @@ export const createChat = async (req: Request, res: Response) => {
         },
       },
     });
-    res.send(chat).status(200);
+    res.json({ data: chat }).status(200);
   } catch (error) {
-    res.send(error).status(500);
+    res.send({ error }).status(500);
   }
 };
 
@@ -45,8 +45,8 @@ export const getAllChats = async (req: Request, res: Response) => {
         updatedAt: "desc",
       },
     });
-    res.send(chats).status(200);
+    res.json({ data: chats }).status(200);
   } catch (error) {
-    res.send(error).status(500);
+    res.json({ error }).status(500);
   }
 };

@@ -10,7 +10,7 @@ export const getUsers = async (req: Request, res: Response) => {
     },
   });
 
-  res.send(users).status(200);
+  res.send({ data: users }).status(200);
 };
 
 export const updateUser = async (req: Request, res: Response) => {
@@ -27,8 +27,8 @@ export const updateUser = async (req: Request, res: Response) => {
       },
     });
 
-    res.send(user).status(200);
+    res.json({ data: user }).status(200);
   } catch (error) {
-    res.send(error).status(500);
+    res.json({ error }).status(500);
   }
 };

@@ -23,10 +23,10 @@ export const signin = async (req: Request, res: Response) => {
       },
     });
 
-    const token = jwt.sign({ user }, process.env.SECRET_JWT!);
-    res.send({ token }).status(200);
+    const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
+    res.json({ token }).status(200);
   } catch (error) {
-    res.send(error).status(500);
+    res.json(error).status(500);
   }
 };
 
@@ -41,16 +41,16 @@ export const login = async (req: Request, res: Response) => {
     });
 
     if (user) {
-      const token = jwt.sign({ user }, process.env.SECRET_JWT!);
+      const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
       const passwordIsEquel = await bcrypt.compare(password, user.password);
 
-      if (!passwordIsEquel) return res.send({ message: "Password sbagliata" }).status(400);
+      if (!passwordIsEquel) return res.json({ message: "Password sbagliata" }).status(400);
 
-      return res.send({ token }).status(200);
+      return res.json({ token }).status(200);
     } else {
       return res.send({ message: "Utente non trovato" }).status(404);
     }
   } catch (error) {
-    res.send(error).status(500);
+    res.json(error).status(500);
   }
 };

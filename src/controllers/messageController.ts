@@ -17,8 +17,8 @@ export const createMessage = async (req: Request, res: Response) => {
       },
     });
 
-    res.send(message).status(200);
+    res.json({data: message}).status(200);
   } catch (error) {
-    res.send(error).status(500);
+    res.json({error}).status(500);
   }
 };
