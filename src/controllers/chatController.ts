@@ -17,6 +17,7 @@ export const createChat = async (req: Request, res: Response) => {
     });
     res.json({ data: chat }).status(200);
   } catch (error) {
+    console.log(error);
     res.send({ error }).status(500);
   }
 };
@@ -42,7 +43,7 @@ export const getAllChats = async (req: Request, res: Response) => {
         },
       },
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: "desc"
       },
     });
     res.json({ data: chats }).status(200);
