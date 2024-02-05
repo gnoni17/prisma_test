@@ -1,7 +1,6 @@
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { Request, Response } from "express";
-
-const prisma = new PrismaClient();
+import { prisma } from "../server";
 
 export const createChat = async (req: Request, res: Response) => {
   const { userIds }: { userIds: number[] } = req.body;

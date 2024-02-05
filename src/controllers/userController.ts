@@ -1,8 +1,7 @@
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { Request, Response } from "express";
 import { toBase64 } from "../utils/convertImage";
-
-const prisma = new PrismaClient();
+import { prisma } from "../server";
 
 export const getUsers = async (req: Request, res: Response) => {
   const users = await prisma.user.findMany({
