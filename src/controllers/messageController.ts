@@ -7,6 +7,8 @@ export const createMessage = async (req: Request, res: Response) => {
   const data: Message = req.body;
   const me: User = res.locals.user;
 
+  if (!data.message) return res.json({ error: "Inserire un messaggio" }).status(401)
+
   try {
     const message = await prisma.message.create({
       data: {

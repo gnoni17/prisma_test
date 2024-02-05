@@ -6,11 +6,16 @@ export const createChat = async (req: Request, res: Response) => {
   const { userIds }: { userIds: number[] } = req.body;
   const me: User = res.locals.user;
 
+  if (!userIds || userIds.length == 0) return res.json({ error: "Nessun utente selezionato" }).status(401)
+
   try {
     const chat = await prisma.chat.create({
       data: {
         users: {
-          connect: [{ id: me.id }, ...userIds.map((e) => ({ id: e }))],
+          connect: [
+            { id: me.id }, 
+            ...userIds?.map(id => ({ id }))
+          ],
         },
       },
     });
