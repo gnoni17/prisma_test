@@ -1,9 +1,7 @@
 import express from "express";
-import { userRoutes } from "./routes/userRoutes";
-import { chatRoutes } from "./routes/chatRoutes";
-import { messageRoutes } from "./routes/messageRoutes";
-import { authRoutes } from "./routes/authRoutes";
-import { authMiddleware } from "./middlerware/authMiddleware";
+import 'module-alias/register';
+import { userRoutes, chatRoutes, messageRoutes, authRoutes } from "@routes/index";
+import { authMiddleware } from "@middlerware/index";
 
 const app = express();
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getUsers, updateUser } from "../controllers/userController";
-import upload from "../utils/uploader";
+import { getUsers, updateUser } from "@controllers/userController";
+import { upload } from "@utils/index";
 
 const router = Router();
 
