@@ -1,5 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { Request, Response } from "express";
+import { toBase64 } from "../utils/convertImage";
 
 const prisma = new PrismaClient();
 
@@ -14,7 +15,7 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-  const { data }: { data: User } = req.body;
+  const { bio }: User = req.body;
   const me: User = res.locals.user;
 
   try {
@@ -23,12 +24,14 @@ export const updateUser = async (req: Request, res: Response) => {
         id: me.id,
       },
       data: {
-        bio: data.bio,
+        bio,
+        image: req.file ? toBase64(req.file.path) : null
       },
     });
 
     res.json({ data: user }).status(200);
   } catch (error) {
+    console.log(error);
     res.json({ error }).status(500);
   }
 };

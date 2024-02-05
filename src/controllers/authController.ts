@@ -9,6 +9,8 @@ const prisma = new PrismaClient();
 export const signin = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
+  if (!password || !username) return res.json({ message: "Inserisca tutti i campi" }).status(401)
+
   if (!validator.isStrongPassword(password))
     return res.send({ message: "La password non è abbstanza sicura" }).status(400);
 
@@ -26,12 +28,15 @@ export const signin = async (req: Request, res: Response) => {
     const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
     res.json({ token }).status(200);
   } catch (error) {
+    console.log(error);
     res.json(error).status(500);
   }
 };
 
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
+
+  if (!password || !username) return res.json({ message: "Inserisca tutti i campi" }).status(401)
 
   try {
     const user = await prisma.user.findUnique({

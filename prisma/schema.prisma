@@ -34,6 +34,7 @@ model User {
   username  String         @unique
   password  String
   bio       String?
+  image     String?
   chats     Chat[]
   messages  Message[]
   createdAt DateTime       @default(now())
