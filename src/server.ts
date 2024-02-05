@@ -15,4 +15,4 @@ app.use("/api/user", authMiddleware, userRoutes);
 app.use("/api/chat", authMiddleware, chatRoutes);
 app.use("/api/message", authMiddleware, messageRoutes);
 
-app.listen("8000", () => console.log(console.log("server is run")));
+app.listen("8000", () => console.log("server is run"));
