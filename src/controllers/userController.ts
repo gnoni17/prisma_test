@@ -4,13 +4,17 @@ import { toBase64 } from "../utils/convertImage";
 import { prisma } from "../server";
 
 export const getUsers = async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany({
-    orderBy: {
-      username: "desc",
-    },
-  });
+  try {
+    const users = await prisma.user.findMany({
+      orderBy: {
+        username: "desc",
+      },
+    });
 
-  res.send({ data: users }).status(200);
+    res.send({ data: users }).status(200);
+  } catch (error) {
+    res.json({ error }).status(500);
+  }
 };
 
 export const updateUser = async (req: Request, res: Response) => {
@@ -24,7 +28,7 @@ export const updateUser = async (req: Request, res: Response) => {
       },
       data: {
         bio,
-        image: req.file ? toBase64(req.file.path) : null
+        image: req.file ? toBase64(req.file.path) : null,
       },
     });
 
