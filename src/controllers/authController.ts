@@ -7,10 +7,10 @@ import { prisma } from "../server";
 export const signin = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
-  if (!password || !username) return res.json({ message: "Inserisca tutti i campi" }).status(400)
+  if (!password || !username) return res.json({ error: "Inserisca tutti i campi" }).status(400)
 
   if (!validator.isStrongPassword(password))
-    return res.send({ message: "La password non è abbstanza sicura" }).status(400);
+    return res.send({ error: "La password non è abbstanza sicura" }).status(400);
 
   try {
     const salt = await bcrypt.genSalt(10);
@@ -34,7 +34,7 @@ export const signin = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
-  if (!password || !username) return res.json({ message: "Inserisca tutti i campi" }).status(400)
+  if (!password || !username) return res.json({ error: "Inserisca tutti i campi" }).status(400)
 
   try {
     const user = await prisma.user.findUnique({
@@ -47,11 +47,11 @@ export const login = async (req: Request, res: Response) => {
       const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
       const passwordIsEquel = await bcrypt.compare(password, user.password);
 
-      if (!passwordIsEquel) return res.json({ message: "Password sbagliata" }).status(400);
+      if (!passwordIsEquel) return res.json({ error: "Password sbagliata" }).status(400);
 
       return res.json({ token }).status(200);
     } else {
-      return res.send({ message: "Utente non trovato" }).status(404);
+      return res.send({ error: "Utente non trovato" }).status(404);
     }
   } catch (error) {
     res.json(error).status(500);

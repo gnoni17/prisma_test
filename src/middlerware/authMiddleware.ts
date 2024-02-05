@@ -11,9 +11,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
       res.locals.user = user;
       next();
     } else {
-      res.send({ message: "Not authorized" }).status(401);
+      res.send({ error: "Not authorized" }).status(401);
     }
   } else {
-    res.send({ message: "Not authorized" }).status(401);
+    res.send({ error: "Not authorized" }).status(401);
   }
 };
