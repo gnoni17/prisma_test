@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userRoutes = exports.messageRoutes = exports.chatRoutes = exports.authRoutes = void 0;
+var authRoutes_1 = require("./authRoutes");
+Object.defineProperty(exports, "authRoutes", { enumerable: true, get: function () { return authRoutes_1.authRoutes; } });
+var chatRoutes_1 = require("./chatRoutes");
+Object.defineProperty(exports, "chatRoutes", { enumerable: true, get: function () { return chatRoutes_1.chatRoutes; } });
+var messageRoutes_1 = require("./messageRoutes");
+Object.defineProperty(exports, "messageRoutes", { enumerable: true, get: function () { return messageRoutes_1.messageRoutes; } });
+var userRoutes_1 = require("./userRoutes");
+Object.defineProperty(exports, "userRoutes", { enumerable: true, get: function () { return userRoutes_1.userRoutes; } });
