@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import prisma from "@db/index";
+import { logger } from "@utils/logger";
 
 export const signin = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -22,11 +23,12 @@ export const signin = async (req: Request, res: Response) => {
         password: passwordHash,
       },
     });
+    logger.info("User created")
 
     const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
     res.json({ token }).status(201);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    logger.error(error)
     res.json({error}).status(500);
   }
 };
@@ -42,8 +44,9 @@ export const login = async (req: Request, res: Response) => {
         username,
       },
     });
-
+    
     if (user) {
+      logger.info("User found")
       const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
       const passwordIsEquel = await bcrypt.compare(password, user.password);
 
@@ -51,9 +54,11 @@ export const login = async (req: Request, res: Response) => {
 
       return res.json({ token }).status(200);
     } else {
+      logger.info("User not found")
       return res.send({ error: "Utente non trovato" }).status(404);
     }
-  } catch (error) {
+  } catch (error: any) {
+    logger.error(error)
     res.json(error).status(500);
   }
 };

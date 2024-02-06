@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import { Request, Response } from "express";
 import prisma from "@db/index";
+import { logger } from "@utils/index";
 
 export const createChat = async (req: Request, res: Response) => {
   const { userIds }: { userIds: number[] } = req.body;
@@ -19,9 +20,10 @@ export const createChat = async (req: Request, res: Response) => {
         },
       },
     });
+    logger.info("chat created")
     res.json({ data: chat }).status(201);
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    logger.error(error)
     res.send({ error }).status(500);
   }
 };
@@ -50,8 +52,10 @@ export const getAllChats = async (req: Request, res: Response) => {
         updatedAt: "desc"
       },
     });
+    logger.info("get all chat")
     res.json({ data: chats }).status(200);
-  } catch (error) {
+  } catch (error: any) {
+    logger.error(error)
     res.json({ error }).status(500);
   }
 };

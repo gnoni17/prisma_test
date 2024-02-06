@@ -1,6 +1,7 @@
 import { Message, User } from "@prisma/client";
 import { Request, Response } from "express";
 import prisma from "@db/index";
+import { logger } from "@utils/logger";
 
 export const createMessage = async (req: Request, res: Response) => {
   const { chatId } = req.params;
@@ -17,9 +18,11 @@ export const createMessage = async (req: Request, res: Response) => {
         message: data.message,
       },
     });
+    logger.info("message created")
 
     res.json({data: message}).status(200);
-  } catch (error) {
+  } catch (error: any) {
+    logger.error(error)
     res.json({error}).status(500);
   }
 };
