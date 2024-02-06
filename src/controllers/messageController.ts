@@ -1,6 +1,6 @@
 import { Message, User } from "@prisma/client";
 import { Request, Response } from "express";
-import { prisma } from "../server";
+import prisma from "@db/index";
 
 export const createMessage = async (req: Request, res: Response) => {
   const { chatId } = req.params;

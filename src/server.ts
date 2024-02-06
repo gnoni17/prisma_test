@@ -4,10 +4,9 @@ configServer();
 import express from "express";
 import { userRoutes, chatRoutes, messageRoutes, authRoutes } from "@routes/index";
 import { authMiddleware } from "@middlerware/index";
-import { PrismaClient } from "@prisma/client";
 
 const app = express();
-export const prisma = new PrismaClient({ log: ["error"] });
+
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

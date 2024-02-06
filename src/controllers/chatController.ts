@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import { Request, Response } from "express";
-import { prisma } from "../server";
+import prisma from "@db/index";
 
 export const createChat = async (req: Request, res: Response) => {
   const { userIds }: { userIds: number[] } = req.body;

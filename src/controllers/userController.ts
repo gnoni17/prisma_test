@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import { Request, Response } from "express";
 import { toBase64 } from "../utils/convertImage";
-import { prisma } from "../server";
+import prisma from "@db/index";
 
 export const getUsers = async (req: Request, res: Response) => {
   try {

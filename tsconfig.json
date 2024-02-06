@@ -34,6 +34,7 @@
       "@routes/*": ["./src/routes/*", "./dist/src/routes/*"],
       "@middlerware/*": ["./src/middlerware/*", "./dist/src/middlerware/*"],
       "@controllers/*": ["./src/controllers/*", "./dist/src/controllers/*"],
+      "@db/*": ["./src/db/*", "./dist/src/db/*"],
     },                                      
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */

@@ -11,5 +11,6 @@ export function configServer() {
     "@routes": `${__dirname}/routes`,
     "@middlerware": `${__dirname}/middlerware`,
     "@controllers": `${__dirname}/controllers`,
+    "@db": `${__dirname}/db`,
   });
 }

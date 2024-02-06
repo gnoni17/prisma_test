@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
-import { prisma } from "../server";
+import prisma from "@db/index";
 
 export const signin = async (req: Request, res: Response) => {
   const { username, password } = req.body;
