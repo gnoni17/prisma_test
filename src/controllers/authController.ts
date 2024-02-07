@@ -25,7 +25,7 @@ export const signin = async (req: Request, res: Response) => {
     });
     logger.info("User created")
 
-    const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
+    const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!, { expiresIn: "7d" });
     res.json({ token, user: { id: user.id, username: user.username } }).status(201);
   } catch (error: any) {
     logger.error(error)
@@ -47,7 +47,7 @@ export const login = async (req: Request, res: Response) => {
 
     if (user) {
       logger.info("User found");
-      const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
+      const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!, { expiresIn: "7d" });
       const passwordIsEquel = await bcrypt.compare(password, user.password);
 
       if (!passwordIsEquel) return res.json({ error: "Password sbagliata" }).status(400);
