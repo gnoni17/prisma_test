@@ -26,10 +26,10 @@ export const signin = async (req: Request, res: Response) => {
     logger.info("User created")
 
     const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
-    res.json({ token }).status(201);
+    res.json({ token, user: { id: user.id, username: user.username } }).status(201);
   } catch (error: any) {
     logger.error(error)
-    res.json({error}).status(500);
+    res.json({ error }).status(500);
   }
 };
 
@@ -44,9 +44,9 @@ export const login = async (req: Request, res: Response) => {
         username,
       },
     });
-    
+
     if (user) {
-      logger.info("User found")
+      logger.info("User found");
       const token = jwt.sign({ ...user, password: null }, process.env.SECRET_JWT!);
       const passwordIsEquel = await bcrypt.compare(password, user.password);
 
@@ -54,11 +54,11 @@ export const login = async (req: Request, res: Response) => {
 
       return res.json({ token }).status(200);
     } else {
-      logger.info("User not found")
+      logger.info("User not found");
       return res.send({ error: "Utente non trovato" }).status(404);
     }
   } catch (error: any) {
-    logger.error(error)
+    logger.error(error);
     res.json(error).status(500);
   }
 };
