@@ -1,4 +1,4 @@
-import { Message, User } from "@prisma/client";
+import { Message } from "@prisma/client";
 import { Request, Response } from "express";
 import prisma from "@db/index";
 import { logger } from "@utils/logger";
@@ -6,7 +6,7 @@ import { logger } from "@utils/logger";
 export const createMessage = async (req: Request, res: Response) => {
   const { chatId } = req.params;
   const data: Message = req.body;
-  const me: User = res.locals.user;
+  const me = req.session.user!;
 
   if (!data.message) return res.json({ error: "Inserire un messaggio" }).status(400)
 
@@ -14,7 +14,7 @@ export const createMessage = async (req: Request, res: Response) => {
     const message = await prisma.message.create({
       data: {
         chatId: Number(chatId),
-        userId: me.id,
+        userId: me.id!,
         message: data.message,
       },
     });

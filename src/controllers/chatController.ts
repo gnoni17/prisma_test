@@ -1,11 +1,10 @@
-import { User } from "@prisma/client";
 import { Request, Response } from "express";
 import prisma from "@db/index";
 import { logger } from "@utils/index";
 
 export const createChat = async (req: Request, res: Response) => {
   const { userIds }: { userIds: number[] } = req.body;
-  const me: User = res.locals.user;
+  const me = req.session.user!;
 
   if (!userIds || userIds.length == 0) return res.json({ error: "Nessun utente selezionato" }).status(400)
 
@@ -29,7 +28,7 @@ export const createChat = async (req: Request, res: Response) => {
 };
 
 export const getAllChats = async (req: Request, res: Response) => {
-  const me: User = res.locals.user;
+  const me = req.session.user!;
 
   try {
     const chats = await prisma.chat.findMany({

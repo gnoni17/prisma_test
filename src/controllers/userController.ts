@@ -22,7 +22,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
   const { bio }: User = req.body;
-  const me: User = res.locals.user;
+  const me = req.session.user!;
 
   try {
     const user = await prisma.user.update({
