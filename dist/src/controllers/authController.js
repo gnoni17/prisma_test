@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.signin = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const validator_1 = __importDefault(require("validator"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const server_1 = require("../server");
+const index_1 = __importDefault(require("@db/index"));
+const logger_1 = require("@utils/logger");
 const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     if (!password || !username)
@@ -26,17 +26,25 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const salt = yield bcrypt_1.default.genSalt(10);
         const passwordHash = yield bcrypt_1.default.hash(password, salt);
-        const user = yield server_1.prisma.user.create({
+        const userExist = yield index_1.default.user.findUnique({
+            where: {
+                username
+            }
+        });
+        if (userExist)
+            return res.send({ message: "Utente esistente" }).status(400);
+        const user = yield index_1.default.user.create({
             data: {
                 username,
                 password: passwordHash,
             },
         });
-        const token = jsonwebtoken_1.default.sign(Object.assign(Object.assign({}, user), { password: null }), process.env.SECRET_JWT);
-        res.json({ token }).status(201);
+        req.session.user = { id: user.id, username: user.username };
+        logger_1.logger.info("User created");
+        res.json(Object.assign(Object.assign({}, user), { password: null })).status(201);
     }
     catch (error) {
-        console.log(error);
+        logger_1.logger.error(error);
         res.json({ error }).status(500);
     }
 });
@@ -46,23 +54,26 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!password || !username)
         return res.json({ error: "Inserisca tutti i campi" }).status(400);
     try {
-        const user = yield server_1.prisma.user.findUnique({
+        const user = yield index_1.default.user.findUnique({
             where: {
                 username,
             },
         });
         if (user) {
-            const token = jsonwebtoken_1.default.sign(Object.assign(Object.assign({}, user), { password: null }), process.env.SECRET_JWT);
+            logger_1.logger.info("User found");
+            req.session.user = { id: user.id, username: user.username };
             const passwordIsEquel = yield bcrypt_1.default.compare(password, user.password);
             if (!passwordIsEquel)
                 return res.json({ error: "Password sbagliata" }).status(400);
-            return res.json({ token }).status(200);
+            return res.json(Object.assign(Object.assign({}, user), { password: null })).status(200);
         }
         else {
+            logger_1.logger.info("User not found");
             return res.send({ error: "Utente non trovato" }).status(404);
         }
     }
     catch (error) {
+        logger_1.logger.error(error);
         res.json(error).status(500);
     }
 });

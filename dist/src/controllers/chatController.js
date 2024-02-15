@@ -8,16 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllChats = exports.createChat = void 0;
-const server_1 = require("../server");
+const index_1 = __importDefault(require("@db/index"));
+const index_2 = require("@utils/index");
 const createChat = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userIds } = req.body;
-    const me = res.locals.user;
+    const me = req.session.user;
     if (!userIds || userIds.length == 0)
         return res.json({ error: "Nessun utente selezionato" }).status(400);
     try {
-        const chat = yield server_1.prisma.chat.create({
+        const chat = yield index_1.default.chat.create({
             data: {
                 users: {
                     connect: [
@@ -27,18 +31,19 @@ const createChat = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 },
             },
         });
+        index_2.logger.info("chat created");
         res.json({ data: chat }).status(201);
     }
     catch (error) {
-        console.log(error);
+        index_2.logger.error(error);
         res.send({ error }).status(500);
     }
 });
 exports.createChat = createChat;
 const getAllChats = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const me = res.locals.user;
+    const me = req.session.user;
     try {
-        const chats = yield server_1.prisma.chat.findMany({
+        const chats = yield index_1.default.chat.findMany({
             where: {
                 users: {
                     some: {
@@ -58,9 +63,11 @@ const getAllChats = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 updatedAt: "desc"
             },
         });
+        index_2.logger.info("get all chat");
         res.json({ data: chats }).status(200);
     }
     catch (error) {
+        index_2.logger.error(error);
         res.json({ error }).status(500);
     }
 });
