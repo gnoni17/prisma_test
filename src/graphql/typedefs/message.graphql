@@ -1,0 +1,24 @@
+type Message {
+  id: Int!
+  message: String!
+  user: User
+  userId: Int!
+  chat: Chat
+  chatId: Int!
+}
+
+input MessageInput {
+  message: String!
+  userId: Int!
+  chatId: Int!
+}
+
+type Query {
+  messages(chatId: Int!): [Message]
+}
+
+type Mutation {
+  createMessage(input: MessageInput!): Message
+  updateMessage(input: MessageInput!): Message
+  deleteMessage(id: Int!): Message
+}

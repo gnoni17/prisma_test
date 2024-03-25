@@ -1,5 +1,4 @@
 import prisma from "@db/index";
-import { extractSelections } from "../utils/extractSelections";
 import { GraphQLResolveInfo } from "graphql";
 
 interface GetUsersArgs {
@@ -18,8 +17,6 @@ interface UserInput {
 }
 
 export const getUsers = async ({ info }: GetUsersArgs) => {
-  const extractedSelections = extractSelections(info);
-
   return await prisma.user.findMany({
     orderBy: {
       username: "desc",
@@ -28,8 +25,6 @@ export const getUsers = async ({ info }: GetUsersArgs) => {
 };
 
 export const getUser = async ({ id, info }: GetUserArgs) => {
-  const extractedSelections = extractSelections(info);
-
   return await prisma.user.findUnique({
     where: {
       id,

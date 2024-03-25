@@ -1,0 +1,20 @@
+type Chat {
+  id: Int!
+  users: [User]
+  messages: [Message]
+}
+
+input ChatInput {
+  users: [Int]
+}
+
+type Query {
+  chats: [Chat]
+  chat(chatId: Int!): Chat
+}
+
+type Mutation {
+  createChat(input: ChatInput!): Chat
+  updateChat(input: ChatInput!): Chat
+  deleteChat(id: Int!): Chat
+}
